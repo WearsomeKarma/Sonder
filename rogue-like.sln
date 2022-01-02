@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04AA0-301F-1199-BF4B-00C04F79EF44}") = "rogue-like", "RogueLike\rogue-like.csproj", "{27A0772E-AAE1-412D-8511-6C054C57EFBD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{27A0772E-AAE1-412D-8511-6C054C57EFBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27A0772E-AAE1-412D-8511-6C054C57EFBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27A0772E-AAE1-412D-8511-6C054C57EFBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27A0772E-AAE1-412D-8511-6C054C57EFBD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
