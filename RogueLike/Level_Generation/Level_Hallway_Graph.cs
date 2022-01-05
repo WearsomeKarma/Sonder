@@ -31,7 +31,7 @@ namespace Rogue_Like
 
         private void Private_Record__XZ__Level_Hallway_Graph(Rect_Prism space, ref int v)
         {
-            Rect_Prism rotated_xz = new Rect_Prism(space.Rect_Prism__MIN, space.Rect_Prism__MAX, Axis_Type.XZ);
+            Rect_Prism rotated_xz = new Rect_Prism(space.Rect_Prism__MIN, space.Rect_Prism__MAX, Plane_Type.XZ);
 
             // <Link_Floor>
             Private_Link__Level_Hallway_Graph

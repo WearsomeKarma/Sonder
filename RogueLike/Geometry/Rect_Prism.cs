@@ -6,9 +6,9 @@ namespace Rogue_Like
 {
     public struct Rect_Prism
     {
-        public Plane_3 Rect_Prism__MIN_PLANE { get; }
-        public Plane_3 Rect_Prism__MAX_PLANE { get; }
-        public Axis_Type Rect_Prism__AXIS_TYPE { get; }
+        public Plane_R3 Rect_Prism__MIN_PLANE { get; }
+        public Plane_R3 Rect_Prism__MAX_PLANE { get; }
+        public Plane_Type Rect_Prism__PLANE_TYPE { get; }
 
         public int Rect_Prism__VOLUME
             => 
@@ -27,16 +27,22 @@ namespace Rogue_Like
             => Rect_Prism__MIN_PLANE.Plane__MIN_X;
         public int Rect_Prism__MAX_X
             => Rect_Prism__MAX_PLANE.Plane__MAX_X;
+        public int Rect_Prism__DELTA_X
+            => Rect_Prism__MAX_X - Rect_Prism__MIN_X;
 
         public int Rect_Prism__MIN_Y
             => Rect_Prism__MIN_PLANE.Plane__MIN_Y;
         public int Rect_Prism__MAX_Y
             => Rect_Prism__MAX_PLANE.Plane__MAX_Y;
+        public int Rect_Prism__DELTA_Y
+            => Rect_Prism__MAX_Y - Rect_Prism__MIN_Y;
 
         public int Rect_Prism__MIN_Z
             => Rect_Prism__MIN_PLANE.Plane__MIN_Z;
         public int Rect_Prism__MAX_Z
             => Rect_Prism__MAX_PLANE.Plane__MAX_Z;
+        public int Rect_Prism__DELTA_Z
+            => Rect_Prism__MAX_Z - Rect_Prism__MIN_Z;
 
         public Rect_Prism(int size_x, int size_y, int size_z)
         : this(new Integer_Vector_3(), new Integer_Vector_3(size_x, size_y, size_z))
@@ -51,10 +57,10 @@ namespace Rogue_Like
         (
             Integer_Vector_3 min,
             Integer_Vector_3 max,
-            Axis_Type axis_type = Axis_Type.XY
+            Plane_Type axis_type = Plane_Type.XY
         )
         {
-            Rect_Prism__AXIS_TYPE =
+            Rect_Prism__PLANE_TYPE =
                 axis_type;
 
             int min_x = min.X;
@@ -72,43 +78,43 @@ namespace Rogue_Like
             switch(axis_type)
             {
                 default:
-                case Axis_Type.XY:
+                case Plane_Type.XY:
                     min_plane_max =
                         new Integer_Vector_3(max_x, max_y, min_z);
                     max_plane_min =
                         new Integer_Vector_3(min_x, min_y, max_z);
 
                     Rect_Prism__MIN_PLANE =
-                        new Plane_3(min, min_plane_max);
+                        new Plane_R3(min, min_plane_max, Rect_Prism__PLANE_TYPE);
 
                     Rect_Prism__MAX_PLANE =
-                        new Plane_3(max_plane_min, max);
+                        new Plane_R3(max_plane_min, max, Rect_Prism__PLANE_TYPE);
 
                     break;
-                case Axis_Type.XZ:
+                case Plane_Type.XZ:
                     min_plane_max =
                         new Integer_Vector_3(max_x, min_y, max_z);
                     max_plane_min =
                         new Integer_Vector_3(min_x, max_y, min_z);
 
                     Rect_Prism__MIN_PLANE =
-                        new Plane_3(min, min_plane_max);
+                        new Plane_R3(min, min_plane_max, Rect_Prism__PLANE_TYPE);
 
                     Rect_Prism__MAX_PLANE =
-                        new Plane_3(max_plane_min, max);
+                        new Plane_R3(max_plane_min, max, Rect_Prism__PLANE_TYPE);
 
                     break;
-                case Axis_Type.YZ:
+                case Plane_Type.YZ:
                     min_plane_max =
                         new Integer_Vector_3(min_x, max_y, max_z);
                     max_plane_min =
                         new Integer_Vector_3(max_x, min_y, min_z);
 
                     Rect_Prism__MIN_PLANE =
-                        new Plane_3(min, min_plane_max);
+                        new Plane_R3(min, min_plane_max, Rect_Prism__PLANE_TYPE);
 
                     Rect_Prism__MAX_PLANE =
-                        new Plane_3(max_plane_min, max);
+                        new Plane_R3(max_plane_min, max, Rect_Prism__PLANE_TYPE);
 
                     break;
             }
@@ -157,10 +163,10 @@ namespace Rogue_Like
         {
             yield return Rect_Prism__MIN;
 
-            switch(Rect_Prism__AXIS_TYPE)
+            switch(Rect_Prism__PLANE_TYPE)
             {
                 default:
-                case Axis_Type.XY: //Z exclusive.
+                case Plane_Type.XY: //Z exclusive.
 
                     //<min_plane>
                     yield return 
@@ -187,7 +193,7 @@ namespace Rogue_Like
                     //</max_plane>
 
                     break;
-                case Axis_Type.XZ: //Y exclusive
+                case Plane_Type.XZ: //Y exclusive
 
                     //<min_plane>
                     yield return 
@@ -214,7 +220,7 @@ namespace Rogue_Like
                     //</max_plane>
 
                     break;
-                case Axis_Type.YZ: //X exclusive
+                case Plane_Type.YZ: //X exclusive
 
                     //<min_plane>
                     yield return 
@@ -248,7 +254,124 @@ namespace Rogue_Like
 
         public override string ToString()
         {
-            return $"rect_prism:[{Rect_Prism__MIN_PLANE} - {Rect_Prism__MAX_PLANE}, {Rect_Prism__AXIS_TYPE}]";
+            return $"rect_prism:[{Rect_Prism__MIN_PLANE} - {Rect_Prism__MAX_PLANE}, {Rect_Prism__PLANE_TYPE}]";
+        }
+
+        public static Plane_R3 Get__Closest_Plane
+        (
+            Rect_Prism space, 
+            Integer_Vector_3 point,
+            bool tie__min_or_max = true
+        )
+        {
+            int compare_x =
+                point.X 
+                -
+                (space.Rect_Prism__DELTA_X/2);
+            int compare_y =
+                point.Y 
+                -
+                (space.Rect_Prism__DELTA_Y/2);
+            int compare_z =
+                point.Z
+                -
+                (space.Rect_Prism__DELTA_Z/2);
+
+            int abs_compare_x =
+                System.Math.Abs(compare_x);
+            int abs_compare_y =
+                System.Math.Abs(compare_y);
+            int abs_compare_z =
+                System.Math.Abs(compare_z);
+
+            Axis_Type major_extrema;
+            Axis_Type minor_extrema;
+
+            if(abs_compare_x > abs_compare_y)
+            {
+                if (abs_compare_y > abs_compare_z)
+                {
+                    major_extrema = Axis_Type.X;
+                    minor_extrema = Axis_Type.Y;
+                }
+                else
+                {
+                    if (abs_compare_x > abs_compare_z)
+                    {
+                        major_extrema = Axis_Type.X;
+                        minor_extrema = Axis_Type.Z;
+                    }
+                    else
+                    {
+                        major_extrema = Axis_Type.Z;
+                        minor_extrema = Axis_Type.X;
+                    }
+                }
+            }
+            else
+            {
+                if (abs_compare_x > abs_compare_z)
+                {
+                    major_extrema = Axis_Type.Y;
+                    minor_extrema = Axis_Type.X;
+                }
+                else
+                {
+                    if (abs_compare_y > abs_compare_z)
+                    {
+                        major_extrema = Axis_Type.Y;
+                        minor_extrema = Axis_Type.Z;
+                    }
+                    else
+                    {
+                        major_extrema = Axis_Type.Z;
+                        minor_extrema = Axis_Type.Y;
+                    }
+                }
+            }
+
+            Plane_Type closest_plane_type;
+
+            switch(major_extrema | minor_extrema)
+            {
+                default:
+                case Axis_Type.X | Axis_Type.Y:
+                    closest_plane_type = Plane_Type.XY;
+                    break;
+                case Axis_Type.X | Axis_Type.Z:
+                    closest_plane_type = Plane_Type.XZ;
+                    break;
+                case Axis_Type.Y | Axis_Type.Z:
+                    closest_plane_type = Plane_Type.YZ;
+                    break;
+            }
+
+            bool is_min_or_max;
+
+            switch(major_extrema)
+            {
+                default:
+                case Axis_Type.X:
+                    is_min_or_max =
+                        compare_x <= 0;
+                    break;
+                case Axis_Type.Y:
+                    is_min_or_max =
+                        compare_y <= 0;
+                    break;
+                case Axis_Type.Z:
+                    is_min_or_max =
+                        compare_z <= 0;
+                    break;
+            }
+
+            Rect_Prism rot__prism =
+                new Rect_Prism(space.Rect_Prism__MIN, space.Rect_Prism__MAX, closest_plane_type);
+
+            return 
+                (is_min_or_max)
+                ? rot__prism.Rect_Prism__MIN_PLANE
+                : rot__prism.Rect_Prism__MAX_PLANE;
         }
 
         public static Rect_Prism Get__Internal(Rect_Prism space)
@@ -282,14 +405,14 @@ namespace Rogue_Like
             Integer_Vector_3 min = new Integer_Vector_3(min_x, min_y, min_z);
             Integer_Vector_3 max = new Integer_Vector_3(max_x, max_y, max_z);
 
-            return new Rect_Prism(min, max, space.Rect_Prism__AXIS_TYPE);
+            return new Rect_Prism(min, max, space.Rect_Prism__PLANE_TYPE);
         }
 
         public static void Split
         (
             Rect_Prism space,
             Integer_Vector_3 position,
-            Axis_Type axis_type,
+            Plane_Type axis_type,
             out Rect_Prism left, 
             out Rect_Prism right
         )
@@ -325,21 +448,21 @@ namespace Rogue_Like
             switch(axis_type)
             {
                 default:
-                case Axis_Type.XY:
+                case Plane_Type.XY:
                     //left__max_plane__min_z = node.Node__KEY.Z;
                     left__max_z = position.Z;
 
                     right__min_z = position.Z;
                     //right__min_plane__max_z = node.Node__KEY.Z;
                     break;
-                case Axis_Type.XZ:
+                case Plane_Type.XZ:
                     //left__max_plane__min_y = node.Node__KEY.Y;
                     left__max_y = position.Y;
 
                     right__min_y = position.Y;
                     //right__min_plane__max_y = node.Node__KEY.Y;
                     break;
-                case Axis_Type.YZ:
+                case Plane_Type.YZ:
                     //left__max_plane__min_x = node.Node__KEY.X;
                     left__max_x = position.X;
 

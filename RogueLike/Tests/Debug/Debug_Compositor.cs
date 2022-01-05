@@ -79,16 +79,17 @@ namespace Rogue_Like
 
             foreach(Rect_Prism room in rooms)
             {
-                Rect_Prism rotated = new Rect_Prism(room.Rect_Prism__MIN, room.Rect_Prism__MAX, Axis_Type.XZ);
+                Rect_Prism rotated = new Rect_Prism(room.Rect_Prism__MIN, room.Rect_Prism__MAX, Plane_Type.XZ);
                 rotated = Rect_Prism.Get__Internal(rotated);
 
-                Plane_3 floor = rotated.Rect_Prism__MIN_PLANE;
+                Plane_R3 floor = rotated.Rect_Prism__MIN_PLANE;
 
-                Xerxes_Engine.Log.Write__Info__Log($"Compositing rotated floor:{floor}. on axis: {rotated.Rect_Prism__AXIS_TYPE}", this);
+                Xerxes_Engine.Log.Write__Info__Log($"Compositing rotated floor:{floor}. on axis: {rotated.Rect_Prism__PLANE_TYPE}", this);
 
-                foreach(Integer_Vector_3 vec in floor.Get__Positions__Plane_3())
+                foreach(Integer_Vector_3 vec in floor.Get__Positions__Plane_R3())
                 {
-                    Set__Tile__Level_Constructor(vec, tile);
+                    throw new System.NotImplementedException();
+                    //Set__Tile__Level_Constructor(vec, tile);
                 }
             }
         }

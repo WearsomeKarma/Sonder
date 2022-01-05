@@ -11,8 +11,8 @@ namespace Rogue_Like
         {
             public Integer_Vector_3 Node__KEY { get; }
             public int Node__DEPTH { get; }
-            public Axis_Type Get__Axis_Bias__Node(int depth_offset = 0)
-                => (Axis_Type)((Node__DEPTH+depth_offset) % 3);
+            public Plane_Type Get__Axis_Bias__Node(int depth_offset = 0)
+                => (Plane_Type)((Node__DEPTH+depth_offset) % 3);
 
             public KDTree_R3_Node Node__Left { get; set; }
             public KDTree_R3_Node Node__Right { get; set; }
@@ -28,7 +28,7 @@ namespace Rogue_Like
 
             public int Compare__Key__Node(Integer_Vector_3 position, int depth_offset = 0)
             {
-                Axis_Type axis_type = 
+                Plane_Type axis_type = 
                     Get__Axis_Bias__Node(depth_offset);
 
                 int val;
@@ -36,13 +36,13 @@ namespace Rogue_Like
                 switch(axis_type)
                 {
                     default:
-                    case Axis_Type.XY:
+                    case Plane_Type.XY:
                         val = position.Z - Node__KEY.Z;
                         break;
-                    case Axis_Type.XZ:
+                    case Plane_Type.XZ:
                         val = position.Y - Node__KEY.Y;
                         break;
-                    case Axis_Type.YZ:
+                    case Plane_Type.YZ:
                         val = position.X - Node__KEY.X;
                         break;
                 }
@@ -105,30 +105,23 @@ namespace Rogue_Like
             {
                 end_point.Node__Left = new KDTree_R3_Node(position, depth);
                 target = end_point.Node__Left;
-
-                Rect_Prism.Split
-                (
-                    end_point.node__Partition_Left,
-                    target.Node__KEY,
-                    target.Get__Axis_Bias__Node(),
-                    out target.node__Partition_Left,
-                    out target.node__Partition_Right
-                );
             }
             else
             {
                 end_point.Node__Right = new KDTree_R3_Node(position, depth);
                 target = end_point.Node__Right;
-
-                Rect_Prism.Split
-                (
-                    end_point.node__Partition_Right,
-                    target.Node__KEY,
-                    target.Get__Axis_Bias__Node(),
-                    out target.node__Partition_Left,
-                    out target.node__Partition_Right
-                );
             }
+
+            Rect_Prism.Split
+            (
+                (is_Left_Or_Right) 
+                    ? end_point.node__Partition_Left
+                    : end_point.node__Partition_Right,
+                target.Node__KEY,
+                target.Get__Axis_Bias__Node(),
+                out target.node__Partition_Left,
+                out target.node__Partition_Right
+            );
 
             if (target.Node__DEPTH > KDTree__Partition_Depth)
                 KDTree__Partition_Depth = target.Node__DEPTH;
@@ -254,7 +247,7 @@ namespace Rogue_Like
                 KDTree_R3_Node target =
                     Traverse(position, out is_Left_Or_Right);
 
-                return (is_Left_Or_Right) ? target.node__Partition_Left : target.node__Partition_Right;
+                return (is_Left_Or_Right) ? target?.node__Partition_Left : target?.node__Partition_Right;
             }
         }
 

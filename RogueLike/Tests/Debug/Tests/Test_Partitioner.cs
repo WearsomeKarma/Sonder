@@ -22,7 +22,8 @@ namespace Rogue_Like
             SA__Level_Partitioning e_partitioning = 
                 Test__Level_Partitioning(space);
 
-            Log.Write__Info__Log(e_partitioning.Level_Partitioning__KDTREE.ToString(), null);
+            throw new System.NotImplementedException();
+            //Log.Write__Info__Log(e_partitioning.Level_Partitioning__KDTREE.ToString(), null);
         }
 
         internal static SA__Level_Partitioning Test__Level_Partitioning(Rect_Prism space)
@@ -31,10 +32,9 @@ namespace Rogue_Like
                 new Test_Partitioner();
 
             SA__Level_Partitioning e_partitioning =
-                new SA__Level_Partitioning
-                (
-                    space, 3
-                );
+                null;
+
+            throw new System.NotImplementedException();
 
             test.Test<Debug_Partitioner, SA__Level_Partitioning>(e_partitioning);
 

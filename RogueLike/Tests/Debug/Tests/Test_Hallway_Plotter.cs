@@ -23,7 +23,9 @@ namespace Rogue_Like
                 Test_Partitioner.Test__Level_Partitioning(space);
 
             SA__Level_Hallway_Plotting e_plotting =
-                new SA__Level_Hallway_Plotting(e_partitioning);
+                null;
+
+            throw new System.NotImplementedException();
 
             Test_Hallway_Plotter test = new
                 Test_Hallway_Plotter();

@@ -18,11 +18,11 @@ namespace Rogue_Like
             Integer_Vector_3 point =
                 new Integer_Vector_3(one_forth__x, one_forth__y, one_forth__z);
 
-            e.Level_Partitioning__KDTREE.Partition__KDTree(point);
-            e.Level_Partitioning__KDTREE.Partition__KDTree(2*point);
-            e.Level_Partitioning__KDTREE.Partition__KDTree(3*point);
+            e.Partition__Level_Partitioning(point);
+            e.Partition__Level_Partitioning(2*point);
+            e.Partition__Level_Partitioning(3*point);
 
-            foreach(Rect_Prism space in e.Level_Partitioning__KDTREE.Get__Partitions__KDTree())
+            foreach(Rect_Prism space in e.Level_Partitioning__PARTITIONS)
                 Xerxes_Engine.Log.Write__Info__Log($"Partition: {space.ToString()}", this);
         }
     }

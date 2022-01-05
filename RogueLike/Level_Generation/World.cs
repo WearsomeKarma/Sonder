@@ -70,17 +70,12 @@ namespace Rogue_Like
             _World__Current_Level =
                 new Level(e.Generate_Level__SPACE);
 
-            Xerxes_Engine.Log.Write__Info__Log($"Partitioning Level...", this);
-            SA__Level_Partitioning e_partition =
-                new SA__Level_Partitioning(e.Generate_Level__SPACE, e.Generate_Level__ROOM_COUNT);
+            SA__Level_Generation e_generate =
+                new SA__Level_Generation(10,10,10,3);
 
-            Invoke__Descending(e_partition);
+            Invoke__Descending(e_generate);
 
-            Xerxes_Engine.Log.Write__Info__Log("Compositing Level...", this);
-            SA__Level_Compositing e_composite =
-                new SA__Level_Compositing(e_partition, null);
-
-            Invoke__Descending(e_composite);
+            throw new System.NotImplementedException();
         }
 
         private void Private_Render__World

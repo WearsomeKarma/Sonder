@@ -20,6 +20,7 @@ namespace Rogue_Like
         {
             int partition_count = 1;
 
+            /*
             Xerxes_Engine.Log.Write__Info__Log($"Room count:{e.Level_Partitioning__ROOM_COUNT}.", this);
 
             for(int r=0;r<e.Level_Partitioning__ROOM_COUNT;r++)
@@ -49,6 +50,9 @@ namespace Rogue_Like
 
                 e.Level_Partitioning__KDTREE.Partition__KDTree(partition_point);
             }
+            */
+
+            throw new System.NotImplementedException();
         }
     }
 }

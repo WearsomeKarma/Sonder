@@ -27,16 +27,6 @@ namespace Rogue_Like
 
         public void Private_Construct__Level__Level_Constructor(SA__Level_Compositing e)
         {
-            Handle_Construct__Rooms__Level_Constructor(e.Get__Rooms__Level_Constructing());
-            //Handle_Construct__Hallways__Level_Constructor(e.Get__Hallway_Points__Level_Constructing());
-        }
-
-        protected void Set__Tile__Level_Constructor(Integer_Vector_3 point, Tile t)
-        {
-            SA__Set_Tile e_set_tile =
-                new SA__Set_Tile(point, t);
-
-            Invoke__Ascending(e_set_tile);
         }
     }
 }
